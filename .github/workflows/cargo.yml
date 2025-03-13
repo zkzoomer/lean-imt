@@ -1,0 +1,59 @@
+name: Cargo
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+# Make sure CI fails on all warnings
+env:
+  RUSTFLAGS: "-Dwarnings"
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+
+      - name: Check formatting
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+      - name: Run clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+
+      - name: Build (default features)
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --verbose
+
+      - name: Build (append-only feature)
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --verbose --features append-only
+
+      - name: Run tests (default features)
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --verbose
+
+      - name: Run tests (append-only feature)
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --verbose --features append-only
