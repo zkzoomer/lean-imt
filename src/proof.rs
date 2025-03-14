@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// This struct contains all the necessary information to verify the inclusion
 /// of a specific `leaf` in the Merkle tree defined by the `root`.
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LeanImtProof {
     /// The leaf hash for which the proof is generated.
     pub leaf: [u8; 32],
