@@ -65,10 +65,17 @@ impl LeanImtProof {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
+    use sha2::{Digest, Sha256};
 
-    fn get_random_leaf() -> [u8; 32] {
+    pub fn hash(data: &[u8]) -> [u8; 32] {
+        let mut hasher = Sha256::new();
+        hasher.update(data);
+        hasher.finalize().into()
+    }
+
+    pub fn get_random_leaf() -> [u8; 32] {
         (0..32)
             .map(|_| rand::random::<u8>())
             .collect::<Vec<u8>>()
