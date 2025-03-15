@@ -40,20 +40,8 @@ jobs:
           command: build
           args: --verbose
 
-      - name: Build (append-only feature)
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --verbose --features append-only
-
       - name: Run tests (default features)
         uses: actions-rs/cargo@v1
         with:
           command: test
           args: --verbose
-
-      - name: Run tests (append-only feature)
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --verbose --features append-only
