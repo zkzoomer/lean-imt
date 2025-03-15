@@ -672,7 +672,14 @@ mod tests {
             .collect();
         let tree: LeanImt = LeanImt::from_leaves(&leaves, hash);
         let state: LeanImtState = tree.export_state();
-        assert_eq!(state.nodes, tree.state.nodes);
+        let tree_from_state: LeanImt = LeanImt::from_state(state, hash);
+        assert_tree_properties(
+            &tree_from_state,
+            tree.root(),
+            tree.depth(),
+            tree.leaves(),
+            tree.size(),
+        );
     }
 
     fn assert_tree_properties(
