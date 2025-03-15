@@ -67,6 +67,7 @@ impl LeanImtProof {
 #[cfg(test)]
 pub mod tests {
     use super::*;
+    use crate::lean_imt::LeanImt;
     use sha2::{Digest, Sha256};
 
     pub fn hash(data: &[u8]) -> [u8; 32] {
@@ -94,5 +95,14 @@ pub mod tests {
         assert_eq!(proof.leaf, leaf);
         assert_eq!(proof.index, index);
         assert_eq!(proof.siblings, siblings);
+    }
+
+    #[test]
+    fn test_verify() {
+        let size: usize = rand::random::<usize>() % (1 << 1 << 12);
+        let leaves: Vec<[u8; 32]> = (0..size).map(|_| get_random_leaf()).collect();
+        let tree: LeanImt = LeanImt::from_leaves(&leaves, hash);
+        let proof: LeanImtProof = tree.generate_proof(rand::random::<usize>() % size);
+        assert!(proof.verify(&tree.root(), hash));
     }
 }
