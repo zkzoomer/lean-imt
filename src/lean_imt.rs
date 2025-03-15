@@ -465,7 +465,7 @@ mod tests {
     }
 
     #[test]
-    fn test_state_from_state() {
+    fn test_state_from() {
         let nodes: Vec<Vec<[u8; 32]>> = vec![(0..rand::random::<usize>() % 1 << 12)
             .map(|_| get_random_leaf())
             .collect()];
