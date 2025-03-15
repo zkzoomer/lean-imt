@@ -169,6 +169,25 @@ impl LeanImt {
         self.state.nodes[self.depth()].first().unwrap_or(&[0u8; 32])
     }
 
+    /// Returns a vector containing all the siblings needed to insert a new leaf into the tree.
+    ///
+    /// # Returns
+    ///
+    /// A vector containing all the siblings of the tree.
+    pub fn siblings(&self) -> Vec<[u8; 32]> {
+        let mut siblings: Vec<[u8; 32]> = Vec::with_capacity(self.depth());
+        let mut size: usize = self.size();
+
+        for level in 0..self.depth() + 1 {
+            if size & 1 == 1 {
+                siblings.push(self.state.nodes[level][size - 1]);
+            }
+            size >>= 1;
+        }
+
+        siblings
+    }
+
     /// Returns the depth of the Merkle tree, the number of levels in the tree minus one.
     ///
     /// # Returns
@@ -513,6 +532,20 @@ mod tests {
             tree.leaves(),
             tree.size(),
         );
+    }
+
+    #[test]
+    fn test_siblings() {
+        let leaves: Vec<[u8; 32]> = (0..rand::random::<u16>())
+            .map(|_| get_random_leaf())
+            .collect();
+        let tree: LeanImt = LeanImt::from_leaves(&leaves, hash);
+        let siblings: Vec<[u8; 32]> = tree.siblings();
+        let expected_root: [u8; 32] =
+            siblings.iter().skip(1).fold(siblings[0], |root, &sibling| {
+                (hash)(&[sibling, root].concat())
+            });
+        assert_eq!(tree.root(), &expected_root);
     }
 
     #[test]
