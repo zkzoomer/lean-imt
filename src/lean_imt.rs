@@ -466,7 +466,7 @@ mod tests {
 
     #[test]
     fn test_state_from() {
-        let nodes: Vec<Vec<[u8; 32]>> = vec![(0..rand::random::<usize>() % 1 << 12)
+        let nodes: Vec<Vec<[u8; 32]>> = vec![(0..rand::random::<u16>())
             .map(|_| get_random_leaf())
             .collect()];
         let state: LeanImtState = LeanImtState::from(nodes.clone());
@@ -500,7 +500,7 @@ mod tests {
 
     #[test]
     fn test_tree_from_state() {
-        let leaves: Vec<[u8; 32]> = (0..rand::random::<usize>() % (1 << 12))
+        let leaves: Vec<[u8; 32]> = (0..rand::random::<u16>())
             .map(|_| get_random_leaf())
             .collect();
         let tree: LeanImt = LeanImt::from_leaves(&leaves, hash);
@@ -556,7 +556,7 @@ mod tests {
 
     #[test]
     fn test_insert() {
-        let size: usize = rand::random::<usize>() % (1 << 1 << 12);
+        let size: usize = rand::random::<u16>() as usize;
         let leaves: Vec<[u8; 32]> = (0..size).map(|_| get_random_leaf()).collect();
         let new_leaf: [u8; 32] = get_random_leaf();
 
@@ -578,9 +578,9 @@ mod tests {
 
     #[test]
     fn test_insert_many() {
-        let size: usize = rand::random::<usize>() % (1 << 1 << 12);
+        let size: usize = rand::random::<u16>() as usize;
         let leaves: Vec<[u8; 32]> = (0..size).map(|_| get_random_leaf()).collect();
-        let new_leaves: Vec<[u8; 32]> = (0..rand::random::<usize>() % 100 + 1)
+        let new_leaves: Vec<[u8; 32]> = (0..rand::random::<u16>() as usize)
             .map(|_| get_random_leaf())
             .collect();
 
@@ -602,7 +602,7 @@ mod tests {
 
     #[test]
     fn test_update() {
-        let size: usize = rand::random::<usize>() % (1 << 1 << 12);
+        let size: usize = rand::random::<u16>() as usize;
         let leaves: Vec<[u8; 32]> = (0..size).map(|_| get_random_leaf()).collect();
         let index: usize = rand::random::<usize>() % size;
         let new_leaf: [u8; 32] = get_random_leaf();
@@ -625,7 +625,7 @@ mod tests {
 
     #[test]
     fn test_update_many() {
-        let size: usize = 5; //rand::random::<usize>() % (1 << 1 << 12);
+        let size: usize = rand::random::<u16>() as usize;
         let leaves: Vec<[u8; 32]> = (0..size).map(|_| get_random_leaf()).collect();
         let indices: Vec<usize> = (0../* rand::random::<usize>() % 100 +  */1)
             .map(|_| rand::random::<usize>() % size)
@@ -652,7 +652,7 @@ mod tests {
 
     #[test]
     fn test_generate_verify_proof() {
-        let size: usize = rand::random::<usize>() % (1 << 1 << 12);
+        let size: usize = rand::random::<u16>() as usize;
         let leaves: Vec<[u8; 32]> = (0..size).map(|_| get_random_leaf()).collect();
         let tree: LeanImt = LeanImt::from_leaves(&leaves, hash);
 
